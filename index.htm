@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>請求書管理</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a1a; font-size: 14px; }
+.container { max-width: 800px; margin: 0 auto; padding: 1.5rem 1rem; }
+h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.stat { background: #fff; border-radius: 10px; padding: 0.875rem 1rem; border: 0.5px solid #e0e0d8; }
+.stat-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+.stat-value { font-size: 20px; font-weight: 500; }
+.controls { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+input, select, textarea { font-size: 13px; padding: 7px 10px; border: 0.5px solid #d0d0c8; border-radius: 8px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit; }
+input:focus, select:focus, textarea:focus { border-color: #888; }
+.controls input { flex: 1; min-width: 160px; }
+.btn { font-size: 13px; padding: 7px 14px; border: 0.5px solid #d0d0c8; border-radius: 8px; background: #fff; color: #1a1a1a; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-family: inherit; }
+.btn:hover { background: #f0f0e8; }
+.btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.btn-primary:hover { background: #333; }
+.invoice-list { display: flex; flex-direction: column; gap: 8px; }
+.invoice-card { background: #fff; border: 0.5px solid #e0e0d8; border-radius: 12px; padding: 0.875rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.invoice-card:hover { border-color: #bbb; }
+.inv-main { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.inv-num { font-size: 12px; font-weight: 500; color: #888; min-width: 64px; }
+.inv-client { font-weight: 500; }
+.inv-sub { font-size: 12px; color: #888; }
+.inv-actions { display: flex; align-items: center; gap: 8px; }
+.inv-amount { font-weight: 500; font-size: 15px; white-space: nowrap; }
+.badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 100px; }
+.badge-draft { background: #f0efe8; color: #555; }
+.badge-sent { background: #e6f0f8; color: #1a5f8a; }
+.badge-paid { background: #e8f3de; color: #2d6b10; }
+.badge-overdue { background: #fce8e8; color: #8a1a1a; }
+.icon-btn { background: none; border: none; cursor: pointer; color: #999; padding: 5px; border-radius: 6px; display: flex; align-items: center; font-size: 16px; }
+.icon-btn:hover { background: #f0f0e8; color: #333; }
+.empty { text-align: center; padding: 3rem 1rem; color: #999; }
+.overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: flex; align-items: flex-start; justify-content: center; padding-top: 2rem; z-index: 100; }
+.modal { background: #fff; border-radius: 14px; border: 0.5px solid #ddd; padding: 1.5rem; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; margin: 0 1rem; }
+.modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 1.25rem; }
+.form-row { margin-bottom: 12px; }
+.form-row label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
+.form-row input, .form-row select, .form-row textarea { width: 100%; }
+.form-row textarea { resize: vertical; min-height: 56px; }
+.form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1rem; }
+.items-section { border: 0.5px solid #e0e0d8; border-radius: 8px; overflow: hidden; margin-top: 4px; }
+.items-header { display: grid; grid-template-columns: 1fr 60px 80px 32px; gap: 6px; padding: 6px 8px; background: #f5f5f0; font-size: 11px; color: #888; font-weight: 500; }
+.item-row { display: grid; grid-template-columns: 1fr 60px 80px 32px; gap: 6px; padding: 6px 8px; border-top: 0.5px solid #e8e8e0; align-items: center; }
+.item-row input { padding: 4px 6px; font-size: 12px; }
+.add-item-btn { font-size: 12px; color: #888; background: none; border: none; cursor: pointer; padding: 7px 8px; width: 100%; text-align: left; border-top: 0.5px solid #e8e8e0; font-family: inherit; display: flex; align-items: center; gap: 4px; }
+.add-item-btn:hover { background: #f5f5f0; color: #333; }
+.subtotal-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 4px; }
+.total-row { display: flex; justify-content: space-between; font-weight: 500; border-top: 0.5px solid #e0e0d8; padding-top: 8px; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1><i class="ti ti-file-invoice"></i>請求書管理</h1>
+  <div class="stats" id="stats"></div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="顧客名・番号で検索..." oninput="render()">
+    <select id="filterStatus" onchange="render()">
+      <option value="">すべて</option>
+      <option value="draft">下書き</option>
+      <option value="sent">送付済</option>
+      <option value="paid">支払済</option>
+      <option value="overdue">期限超過</option>
+    </select>
+    <button class="btn btn-primary" onclick="openNew()"><i class="ti ti-plus"></i>新規作成</button>
+  </div>
+  <div class="invoice-list" id="list"></div>
+</div>
+<div id="modal-area"></div>
+
+<script>
+const TAX = 0.1;
+let invoices = JSON.parse(localStorage.getItem('invoices_v2') || 'null') || [
+  { id:'INV-001', client:'株式会社サンプル', desc:'Webサイト制作', issueDate:'2026-05-20', dueDate:'2026-06-20', status:'paid', items:[{name:'デザイン',qty:1,price:150000},{name:'コーディング',qty:1,price:200000}] },
+  { id:'INV-002', client:'テスト商事', desc:'システム開発', issueDate:'2026-06-01', dueDate:'2026-06-30', status:'sent', items:[{name:'要件定義',qty:1,price:100000},{name:'開発',qty:3,price:120000}] },
+  { id:'INV-003', client:'サンプル工業', desc:'コンサルティング', issueDate:'2026-06-10', dueDate:'2026-07-10', status:'draft', items:[{name:'コンサル',qty:5,price:50000}] }
+];
+let editId = null;
+function save() { localStorage.setItem('invoices_v2', JSON.stringify(invoices)); }
+function subtotal(items) { return items.reduce((s,i)=>s+Number(i.qty||0)*Number(i.price||0),0); }
+function total(items) { return Math.round(subtotal(items)*(1+TAX)); }
+function fmt(n) { return '¥'+Math.round(n).toLocaleString('ja-JP'); }
+function badgeHtml(s) {
+  const m={draft:['下書き','badge-draft'],sent:['送付済','badge-sent'],paid:['支払済','badge-paid'],overdue:['期限超過','badge-overdue']};
+  const [t,c]=m[s]||['不明','badge-draft'];
+  return `<span class="badge ${c}">${t}</span>`;
+}
+function renderStats() {
+  const paid = invoices.filter(i=>i.status==='paid').reduce((s,i)=>s+total(i.items),0);
+  const unpaid = invoices.filter(i=>i.status==='sent').reduce((s,i)=>s+total(i.items),0);
+  const overdue = invoices.filter(i=>i.status==='overdue').length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-label">合計件数</div><div class="stat-value">${invoices.length}件</div></div>
+    <div class="stat"><div class="stat-label">入金済</div><div class="stat-value" style="color:#2d6b10">${fmt(paid)}</div></div>
+    <div class="stat"><div class="stat-label">未収</div><div class="stat-value" style="color:#185fa5">${fmt(unpaid)}</div></div>
+    <div class="stat"><div class="stat-label">期限超過</div><div class="stat-value" style="color:#8a1a1a">${overdue}件</div></div>
+  `;
+}
+function render() {
+  renderStats();
+  const q = document.getElementById('search').value.toLowerCase();
+  const sf = document.getElementById('filterStatus').value;
+  const list = invoices.filter(i=>(!q||i.client.toLowerCase().includes(q)||i.id.toLowerCase().includes(q))&&(!sf||i.status===sf));
+  const el = document.getElementById('list');
+  if (!list.length) { el.innerHTML = '<div class="empty"><i class="ti ti-file-off" style="font-size:32px;display:block;margin:0 auto 8px"></i>請求書がありません</div>'; return; }
+  el.innerHTML = list.map(inv=>`
+    <div class="invoice-card">
+      <div class="inv-main">
+        <span class="inv-num">${inv.id}</span>
+        <div>
+          <div class="inv-client">${inv.client}</div>
+          <div class="inv-sub">${inv.desc} &nbsp;•&nbsp; 期限: ${inv.dueDate}</div>
+        </div>
+        ${badgeHtml(inv.status)}
+      </div>
+      <div class="inv-actions">
+        <div class="inv-amount">${fmt(total(inv.items))}</div>
+        <button class="icon-btn" onclick="openEdit('${inv.id}')" title="編集"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn" onclick="deleteInv('${inv.id}')" title="削除"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+}
+let formItems = [];
+function openNew() {
+  editId = null;
+  const today = new Date().toISOString().slice(0,10);
+  const due = new Date(Date.now()+30*86400000).toISOString().slice(0,10);
+  const nextNum = 'INV-' + String(invoices.length+1).padStart(3,'0');
+  formItems = [{name:'',qty:1,price:0}];
+  showModal({id:nextNum,client:'',desc:'',issueDate:today,dueDate:due,status:'draft'});
+}
+function openEdit(id) {
+  editId = id;
+  const inv = invoices.find(i=>i.id===id);
+  formItems = inv.items.map(i=>({...i}));
+  showModal(inv);
+}
+function showModal(inv) {
+  document.getElementById('modal-area').innerHTML = `
+    <div class="overlay" id="overlay" onclick="closeOnOverlay(event)">
+      <div class="modal">
+        <h2>${editId ? '請求書を編集' : '新規請求書'}</h2>
+        <div class="form-2col">
+          <div class="form-row"><label>請求番号</label><input id="f-id" value="${inv.id}"></div>
+          <div class="form-row"><label>ステータス</label><select id="f-status">
+            <option value="draft" ${inv.status==='draft'?'selected':''}>下書き</option>
+            <option value="sent" ${inv.status==='sent'?'selected':''}>送付済</option>
+            <option value="paid" ${inv.status==='paid'?'selected':''}>支払済</option>
+            <option value="overdue" ${inv.status==='overdue'?'selected':''}>期限超過</option>
+          </select></div>
+        </div>
+        <div class="form-row"><label>顧客名</label><input id="f-client" value="${inv.client}" placeholder="株式会社〇〇"></div>
+        <div class="form-2col">
+          <div class="form-row"><label>発行日</label><input type="date" id="f-issue" value="${inv.issueDate}"></div>
+          <div class="form-row"><label>支払期限</label><input type="date" id="f-due" value="${inv.dueDate}"></div>
+        </div>
+        <div class="form-row"><label>件名・摘要</label><input id="f-desc" value="${inv.desc}" placeholder="Webサイト制作 など"></div>
+        <div class="form-row"><label>明細</label>
+          <div class="items-section">
+            <div class="items-header"><span>品目</span><span style="text-align:right">数量</span><span style="text-align:right">単価</span><span></span></div>
+            <div id="f-items"></div>
+            <button class="add-item-btn" onclick="addItem()"><i class="ti ti-plus" style="font-size:12px"></i> 行を追加</button>
+          </div>
+          <div style="margin-top:8px" id="f-totals"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="closeModal()">キャンセル</button>
+          <button class="btn btn-primary" onclick="saveInv()">保存</button>
+        </div>
+      </div>
+    </div>`;
+  renderItems();
+}
+function renderItems() {
+  document.getElementById('f-items').innerHTML = formItems.map((it,i)=>`
+    <div class="item-row">
+      <input value="${it.name}" oninput="formItems[${i}].name=this.value" placeholder="品目名">
+      <input type="number" value="${it.qty}" min="1" oninput="formItems[${i}].qty=this.value;updTotals()" style="text-align:right">
+      <input type="number" value="${it.price}" min="0" oninput="formItems[${i}].price=this.value;updTotals()" style="text-align:right">
+      <button class="icon-btn" onclick="removeItem(${i})"><i class="ti ti-x" style="font-size:14px"></i></button>
+    </div>`).join('');
+  updTotals();
+}
+function updTotals() {
+  const st = subtotal(formItems);
+  const tax = Math.round(st*TAX);
+  document.getElementById('f-totals').innerHTML = `
+    <div class="subtotal-row"><span>小計</span><span>${fmt(st)}</span></div>
+    <div class="subtotal-row"><span>消費税 (10%)</span><span>${fmt(tax)}</span></div>
+    <div class="total-row"><span>合計</span><span>${fmt(st+tax)}</span></div>`;
+}
+function addItem() { formItems.push({name:'',qty:1,price:0}); renderItems(); }
+function removeItem(i) { if(formItems.length>1){formItems.splice(i,1);renderItems();} }
+function saveInv() {
+  const inv = {
+    id: document.getElementById('f-id').value.trim(),
+    client: document.getElementById('f-client').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    issueDate: document.getElementById('f-issue').value,
+    dueDate: document.getElementById('f-due').value,
+    status: document.getElementById('f-status').value,
+    items: formItems.map(i=>({name:i.name,qty:Number(i.qty),price:Number(i.price)}))
+  };
+  if (!inv.id || !inv.client) { alert('請求番号と顧客名は必須です'); return; }
+  if (editId) {
+    invoices[invoices.findIndex(i=>i.id===editId)] = inv;
+  } else {
+    if (invoices.find(i=>i.id===inv.id)) { alert('この番号は既に存在します'); return; }
+    invoices.unshift(inv);
+  }
+  save(); closeModal(); render();
+}
+function deleteInv(id) {
+  if (!confirm('この請求書を削除しますか？')) return;
+  invoices = invoices.filter(i=>i.id!==id);
+  save(); render();
+}
+function closeModal() { document.getElementById('modal-area').innerHTML = ''; }
+function closeOnOverlay(e) { if(e.target.id==='overlay') closeModal(); }
+render();
+</script>
+</body>
+</html>
