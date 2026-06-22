@@ -46,7 +46,6 @@ input:focus, select:focus, textarea:focus { border-color: #888; }
 .form-row { margin-bottom: 12px; }
 .form-row label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
 .form-row input, .form-row select, .form-row textarea { width: 100%; }
-.form-row textarea { resize: vertical; min-height: 56px; }
 .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1rem; }
 .items-section { border: 0.5px solid #e0e0d8; border-radius: 8px; overflow: hidden; margin-top: 4px; }
@@ -57,7 +56,6 @@ input:focus, select:focus, textarea:focus { border-color: #888; }
 .add-item-btn:hover { background: #f5f5f0; color: #333; }
 .subtotal-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 4px; }
 .total-row { display: flex; justify-content: space-between; font-weight: 500; border-top: 0.5px solid #e0e0d8; padding-top: 8px; margin-top: 4px; }
-.saving { opacity: 0.5; pointer-events: none; }
 .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 200; opacity: 0; transition: opacity 0.3s; }
 .toast.show { opacity: 1; }
 </style>
@@ -95,22 +93,19 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 2500);
 }
 
+async function apiGet(params) {
+  const url = API + '?' + new URLSearchParams(params).toString();
+  const res = await fetch(url);
+  return res.json();
+}
+
 async function loadInvoices() {
   try {
-    const res = await fetch(API);
-    invoices = await res.json();
+    invoices = await apiGet({});
     render();
   } catch(e) {
     document.getElementById('list').innerHTML = '<div class="empty">データの読み込みに失敗しました。時間をおいて再読み込みしてください。</div>';
   }
-}
-
-async function apiPost(body) {
-  const res = await fetch(API, {
-    method: 'POST',
-    body: JSON.stringify(body)
-  });
-  return res.json();
 }
 
 function subtotal(items) { return items.reduce((s,i)=>s+Number(i.qty||0)*Number(i.price||0),0); }
@@ -250,9 +245,10 @@ async function saveInv() {
     items: formItems.map(i=>({name:i.name,qty:Number(i.qty),price:Number(i.price)}))
   };
   if (!inv.id || !inv.client) { alert('請求番号と顧客名は必須です'); return; }
-  document.getElementById('save-btn').textContent = '保存中...';
-  document.getElementById('save-btn').disabled = true;
-  await apiPost({ action: 'save', invoice: inv });
+  const btn = document.getElementById('save-btn');
+  btn.textContent = '保存中...';
+  btn.disabled = true;
+  await apiGet({ action: 'save', invoice: JSON.stringify(inv) });
   if (editId) {
     invoices[invoices.findIndex(i=>i.id===editId)] = inv;
   } else {
@@ -265,7 +261,7 @@ async function saveInv() {
 
 async function deleteInv(id) {
   if (!confirm('この請求書を削除しますか？')) return;
-  await apiPost({ action: 'delete', id });
+  await apiGet({ action: 'delete', id });
   invoices = invoices.filter(i=>i.id!==id);
   render();
   toast('削除しました');
