@@ -39,24 +39,41 @@ input:focus, select:focus, textarea:focus { border-color: #888; }
 .inv-amount { font-weight: 500; font-size: 15px; white-space: nowrap; }
 .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 100px; }
 .badge-draft { background: #f0efe8; color: #555; }
-.badge-sent { background: #e6f0f8; color: #1a5f8a; }
-.badge-paid { background: #e8f3de; color: #2d6b10; }
+.badge-sent { background: #fde8e8; color: #b01a1a; font-weight:600; }
+.badge-paid { background: #dbeafe; color: #1a4fa0; font-weight:600; }
 .badge-overdue { background: #fce8e8; color: #8a1a1a; }
+.badge-clickable { cursor: pointer; position: relative; user-select: none; }
+.badge-clickable:hover { opacity: 0.8; }
+.status-backdrop { position: fixed; inset: 0; z-index: 40; }
+.status-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #fff; border: 0.5px solid #ddd; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 50; min-width: 110px; overflow: hidden; }
+.status-menu-item { padding: 8px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.status-menu-item:hover { background: #f5f5f0; }
+.status-menu-item.active { font-weight: 500; }
 .icon-btn { background: none; border: none; cursor: pointer; color: #999; padding: 5px; border-radius: 6px; display: flex; align-items: center; font-size: 16px; }
 .icon-btn:hover { background: #f0f0e8; color: #333; }
 .pdf-badge { font-size: 11px; background: #fce8d8; color: #8a3a1a; padding: 3px 8px; border-radius: 100px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; }
 .pdf-badge:hover { background: #f5d0b8; }
+.invoice-card { cursor: pointer; }
+.detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid #f0f0e8; font-size: 13px; }
+.detail-row:last-child { border-bottom: none; }
+.detail-label { color: #888; font-size: 12px; min-width: 80px; }
+.detail-items { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.detail-items th { text-align: left; font-weight: 500; color: #888; font-size: 11px; padding: 4px 6px; border-bottom: 0.5px solid #e0e0d8; }
+.detail-items td { padding: 6px 6px; border-bottom: 0.5px solid #f0f0e8; }
+.detail-items td:last-child { text-align: right; }
+.detail-total { display: flex; justify-content: space-between; font-weight: 500; font-size: 15px; padding-top: 10px; margin-top: 4px; }
 .empty { text-align: center; padding: 3rem 1rem; color: #999; }
 .loading { text-align: center; padding: 3rem 1rem; color: #999; }
 .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: flex; align-items: flex-start; justify-content: center; padding-top: 1.5rem; z-index: 100; overflow-y: auto; }
 .modal { background: #fff; border-radius: 14px; border: 0.5px solid #ddd; padding: 1.5rem; width: 100%; max-width: 520px; margin: 0 1rem 2rem; }
 .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 1.25rem; }
-.pdf-zone { border: 1.5px dashed #d0d0c8; border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; margin-bottom: 1rem; transition: border-color 0.2s; }
+.pdf-zone { border: 1.5px dashed #d0d0c8; border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; margin-bottom: 1rem; }
 .pdf-zone:hover, .pdf-zone.drag { border-color: #888; background: #f8f8f4; }
 .pdf-zone-label { font-size: 13px; color: #888; margin-top: 6px; }
 .pdf-zone-file { font-size: 12px; color: #2d6b10; margin-top: 6px; font-weight: 500; }
 .pdf-zone input[type=file] { display: none; }
-.extracting { font-size: 12px; color: #888; margin-top: 6px; }
+.pdf-result { font-size: 12px; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #e8f3de; color: #2d6b10; display: none; }
+.pdf-result.show { display: block; }
 .form-row { margin-bottom: 12px; }
 .form-row label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; }
 .form-row input, .form-row select, .form-row textarea { width: 100%; }
@@ -72,6 +89,9 @@ input:focus, select:focus, textarea:focus { border-color: #888; }
 .total-row { display: flex; justify-content: space-between; font-weight: 500; border-top: 0.5px solid #e0e0d8; padding-top: 8px; margin-top: 4px; }
 .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 .toast.show { opacity: 1; }
+.top-pdf-zone { display: flex; align-items: center; gap: 10px; border: 1.5px dashed #d0d0c8; border-radius: 10px; padding: 12px 16px; margin-bottom: 1rem; cursor: pointer; background: #fff; color: #999; font-size: 13px; }
+.top-pdf-zone:hover, .top-pdf-zone.drag { border-color: #888; background: #f8f8f4; color: #555; }
+.top-pdf-zone.loading { border-color: #aaa; color: #888; cursor: wait; }
 </style>
 </head>
 <body>
@@ -79,12 +99,20 @@ input:focus, select:focus, textarea:focus { border-color: #888; }
   <h1><i class="ti ti-file-invoice"></i>請求書管理</h1>
   <div class="stats" id="stats"></div>
   <div class="tabs" id="tabs"></div>
+  <div class="top-pdf-zone" id="top-pdf-zone"
+    onclick="document.getElementById('top-pdf-input').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="handleTopDrop(event)">
+    <i class="ti ti-file-upload" style="font-size:20px;color:#aaa"></i>
+    <span id="top-pdf-label">PDFをここにドロップして請求書を追加</span>
+    <input type="file" id="top-pdf-input" accept=".pdf" multiple style="display:none" onchange="handleTopPdfs(this.files)">
+  </div>
   <div class="controls">
     <input type="text" id="search" placeholder="顧客名・番号で検索..." oninput="render()">
     <select id="filterStatus" onchange="render()">
       <option value="">すべてのステータス</option>
-      <option value="draft">下書き</option>
-      <option value="sent">送付済</option>
+      <option value="sent">未払い</option>
       <option value="paid">支払済</option>
       <option value="overdue">期限超過</option>
     </select>
@@ -102,30 +130,21 @@ const API = 'https://script.google.com/macros/s/AKfycbzoAYPvkMoLu5P0GszGzxf3Y4RJ
 const TAX = 0.1;
 
 const COMPANIES = [
-  'AxeGroup㈱',
-  '㈱INCLUDE',
-  '㈱LIMITLESS CREDIT',
-  '㈱1.2.3',
-  '㈱Sunny Lab.',
-  '株式会社RIDEPLAN',
-  'トラストマネー株式会社'
+  'AxeGroup㈱', '㈱INCLUDE', '㈱LIMITLESS CREDIT',
+  '㈱1.2.3', '㈱Sunny Lab.', '株式会社RIDEPLAN', 'トラストマネー株式会社'
 ];
 
 const COMPANY_KEYWORDS = {
-  'AxeGroup㈱': ['axegroup', 'axe group', 'アックスグループ', 'axe'],
-  '㈱INCLUDE': ['include', 'インクルード'],
-  '㈱LIMITLESS CREDIT': ['limitless credit', 'limitless', 'リミットレス'],
-  '㈱1.2.3': ['1.2.3'],
-  '㈱Sunny Lab.': ['sunny lab', 'sunnylab', 'サニーラボ'],
-  '株式会社RIDEPLAN': ['rideplan', 'ride plan', 'ライドプラン'],
-  'トラストマネー株式会社': ['トラストマネー', 'trust money', 'trustmoney']
+  'AxeGroup㈱':            ['axegroup', 'axe group', 'アックス'],
+  '㈱INCLUDE':             ['include', 'インクルード'],
+  '㈱LIMITLESS CREDIT':    ['limitless', 'リミットレス'],
+  '㈱1.2.3':               ['1.2.3'],
+  '㈱Sunny Lab.':          ['sunny lab', 'sunnylab', 'サニーラボ'],
+  '株式会社RIDEPLAN':      ['rideplan', 'ride plan', 'ライドプラン'],
+  'トラストマネー株式会社': ['トラストマネー', 'trustmoney', 'trust money']
 };
 
-let invoices = [];
-let editId = null;
-let activeTab = 'all';
-let pendingPdfFile = null;
-let formItems = [];
+let invoices = [], editId = null, activeTab = 'all', pendingPdfFile = null, formItems = [];
 
 function toast(msg) {
   const el = document.getElementById('toast');
@@ -135,8 +154,7 @@ function toast(msg) {
 }
 
 async function apiGet(params) {
-  const url = API + '?' + new URLSearchParams(params).toString();
-  const res = await fetch(url);
+  const res = await fetch(API + '?' + new URLSearchParams(params).toString());
   return res.json();
 }
 
@@ -150,9 +168,7 @@ async function uploadPdfToDrive(file) {
     });
     const data = await res.json();
     return data.url || '';
-  } catch(e) {
-    return '';
-  }
+  } catch(e) { return ''; }
 }
 
 function fileToBase64(file) {
@@ -176,66 +192,166 @@ async function extractTextFromPdf(file) {
   return text;
 }
 
+// 全角→半角変換
+function norm(text) {
+  return text.replace(/[Ａ-Ｚａ-ｚ０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+}
+
 function detectCompany(text) {
-  const lower = text.toLowerCase();
+  const n = norm(text).toLowerCase();
   for (const [company, keywords] of Object.entries(COMPANY_KEYWORDS)) {
     for (const kw of keywords) {
-      if (lower.includes(kw.toLowerCase()) || text.includes(kw)) return company;
+      if (n.includes(kw.toLowerCase())) return company;
     }
   }
   return '';
 }
 
 function detectDueDate(text) {
-  const patterns = [
-    /支払[期い][限日][^\d]{0,5}(\d{4})[年\/\-](\d{1,2})[月\/\-](\d{1,2})/,
-    /お支払[期い][限日][^\d]{0,5}(\d{4})[年\/\-](\d{1,2})[月\/\-](\d{1,2})/,
-    /振込期限[^\d]{0,5}(\d{4})[年\/\-](\d{1,2})[月\/\-](\d{1,2})/,
-    /令和(\d+)年(\d{1,2})月(\d{1,2})日/,
+  const stripped = norm(text).replace(/\s/g, '');
+
+  // パターン1: 年月日ありの標準形式
+  const stdPatterns = [
+    [/口座振替日.{0,10}令和(\d+)年(\d{1,2})月(\d{1,2})日/, true],
+    [/振替日.{0,10}令和(\d+)年(\d{1,2})月(\d{1,2})日/, true],
+    [/支払期限.{0,10}令和(\d+)年(\d{1,2})月(\d{1,2})日/, true],
+    [/令和(\d+)年(\d{1,2})月(\d{1,2})日/, true],
+    [/支払期限.{0,10}(\d{4})[\/年](\d{1,2})[\/月](\d{1,2})/, false],
   ];
-  for (const re of patterns) {
-    const m = text.match(re);
-    if (m) {
-      if (re.source.includes('令和')) {
-        const year = 2018 + parseInt(m[1]);
-        return `${year}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
-      }
-      return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+  for (const [re, isReiwa] of stdPatterns) {
+    const m = stripped.match(re);
+    if (!m) continue;
+    return isReiwa ? reiwaFmt(m[1], m[2], m[3]) : `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  }
+
+  // パターン2: 年月日なし・直後に金額が来る形式 (例: 令和862930,000 → 8年6月29日)
+  const re2 = /令和(\d{1,2})(\d{1,2})(\d{2})(?=\d{1,3},\d{3})/g;
+  let m2;
+  while ((m2 = re2.exec(stripped)) !== null) {
+    const y = parseInt(m2[1]), mo = parseInt(m2[2]), d = parseInt(m2[3]);
+    if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) {
+      return reiwaFmt(y, mo, d);
     }
   }
+
   return '';
 }
+
+function detectAmount(text) {
+  const n = norm(text).replace(/\s/g, '');
+  // 全カンマ区切り金額を抽出し、最も多く出現するものを返す
+  const counts = {};
+  const re = /\d{1,3}(?:,\d{3})+/g;
+  let m;
+  while ((m = re.exec(n)) !== null) {
+    const v = parseInt(m[0].replace(/,/g, ''));
+    if (v >= 1000) counts[v] = (counts[v] || 0) + 1;
+  }
+  if (Object.keys(counts).length === 0) return 0;
+  return Object.entries(counts).reduce((best, [amt, cnt]) => {
+    const [bAmt, bCnt] = best;
+    return cnt > bCnt || (cnt === bCnt && Number(amt) > bAmt) ? [Number(amt), cnt] : best;
+  }, [0, 0])[0];
+}
+
+function detectDesc(text) {
+  const n = norm(text).replace(/\s+/g, ' ');
+  // 内訳欄から摘要を取得
+  const m = n.match(/内\s*訳\s*金\s*額[\s\S]{0,10}取引日[\s\S]{0,5}([぀-鿿\w]+月決報酬|[぀-鿿\w]+報酬|[぀-鿿\w]+費)/);
+  if (m) return m[1];
+  return '';
+}
+
+function reiwaFmt(y, m, d) {
+  return `${2018 + parseInt(y)}-${pad(m)}-${pad(d)}`;
+}
+
+function drivePreview(url) {
+  const m = url.match(/\/file\/d\/([^\/]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
+  return url;
+}
+function pad(n) { return String(n).padStart(2, '0'); }
 
 async function loadInvoices() {
   try {
     invoices = await apiGet({});
     render();
   } catch(e) {
-    document.getElementById('list').innerHTML = '<div class="empty">データの読み込みに失敗しました。時間をおいて再読み込みしてください。</div>';
+    document.getElementById('list').innerHTML = '<div class="empty">データの読み込みに失敗しました。再読み込みしてください。</div>';
   }
 }
 
-function subtotal(items) { return items.reduce((s,i)=>s+Number(i.qty||0)*Number(i.price||0),0); }
-function total(items) { return Math.round(subtotal(items)*(1+TAX)); }
-function fmt(n) { return '¥'+Math.round(n).toLocaleString('ja-JP'); }
+function subtotal(items) { return items.reduce((s,i) => s + Number(i.qty||0) * Number(i.price||0), 0); }
+function total(items) { return Math.round(subtotal(items) * (1 + TAX)); }
+function fmt(n) { return '¥' + Math.round(n).toLocaleString('ja-JP'); }
 
-function badgeHtml(s) {
-  const m={draft:['下書き','badge-draft'],sent:['送付済','badge-sent'],paid:['支払済','badge-paid'],overdue:['期限超過','badge-overdue']};
-  const [t,c]=m[s]||['不明','badge-draft'];
-  return `<span class="badge ${c}">${t}</span>`;
+const STATUS_LIST = [
+  { key:'sent',    label:'未払い',   cls:'badge-sent' },
+  { key:'paid',    label:'支払済み', cls:'badge-paid' },
+  { key:'overdue', label:'期限超過', cls:'badge-overdue' },
+];
+
+function badgeHtml(s, invId) {
+  const cur = STATUS_LIST.find(x => x.key === s) || STATUS_LIST[0];
+  if (!invId) return `<span class="badge ${cur.cls}">${cur.label}</span>`;
+  return `<span class="badge ${cur.cls} badge-clickable" onclick="event.stopPropagation();toggleStatusMenu('${invId}',this)">
+    ${cur.label} <i class="ti ti-chevron-down" style="font-size:10px;vertical-align:middle"></i>
+  </span>`;
+}
+
+function toggleStatusMenu(id, el) {
+  document.querySelectorAll('.status-menu,.status-backdrop').forEach(m => m.remove());
+  const inv = invoices.find(i => i.id === id);
+  if (!inv) return;
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'status-backdrop';
+
+  const menu = document.createElement('div');
+  menu.className = 'status-menu';
+  STATUS_LIST.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'status-menu-item' + (inv.status === s.key ? ' active' : '');
+    item.innerHTML = `<span class="badge ${s.cls}">${s.label}</span>`;
+    item.addEventListener('click', e => {
+      e.stopPropagation();
+      backdrop.remove();
+      menu.remove();
+      changeStatus(id, s.key);
+    });
+    menu.appendChild(item);
+  });
+
+  backdrop.addEventListener('click', e => {
+    e.stopPropagation();
+    backdrop.remove();
+    menu.remove();
+  });
+
+  document.body.appendChild(backdrop);
+  el.style.position = 'relative';
+  el.appendChild(menu);
+}
+
+async function changeStatus(id, status) {
+  document.querySelectorAll('.status-menu').forEach(m => m.remove());
+  const inv = invoices.find(i => i.id === id);
+  if (!inv) return;
+  inv.status = status;
+  await apiGet({ action: 'save', invoice: JSON.stringify(inv) });
+  render();
+  toast('ステータスを更新しました');
 }
 
 function renderTabs() {
-  const el = document.getElementById('tabs');
-  const all = [{ key: 'all', label: 'すべて' }, ...COMPANIES.map(c => ({ key: c, label: c }))];
-  el.innerHTML = all.map(t => `<button class="tab ${activeTab===t.key?'active':''}" onclick="setTab('${t.key}')">${t.label}</button>`).join('');
+  const all = [{ key:'all', label:'すべて' }, ...COMPANIES.map(c => ({ key:c, label:c }))];
+  document.getElementById('tabs').innerHTML = all.map(t =>
+    `<button class="tab ${activeTab===t.key?'active':''}" onclick="setTab('${t.key.replace(/'/g,"\\'")}'">${t.label}</button>`
+  ).join('');
 }
 
-function setTab(key) {
-  activeTab = key;
-  renderTabs();
-  render();
-}
+function setTab(key) { activeTab = key; renderTabs(); render(); }
 
 function renderStats() {
   const src = activeTab === 'all' ? invoices : invoices.filter(i => i.client === activeTab);
@@ -251,84 +367,143 @@ function renderStats() {
 }
 
 function render() {
-  renderTabs();
-  renderStats();
+  renderTabs(); renderStats();
   const q = document.getElementById('search').value.toLowerCase();
   const sf = document.getElementById('filterStatus').value;
-  let list = invoices;
-  if (activeTab !== 'all') list = list.filter(i => i.client === activeTab);
-  if (q) list = list.filter(i => i.client.toLowerCase().includes(q) || i.id.toLowerCase().includes(q));
+  let list = activeTab === 'all' ? invoices : invoices.filter(i => i.client === activeTab);
+  if (q) list = list.filter(i => (i.client||'').toLowerCase().includes(q) || (i.id||'').toLowerCase().includes(q));
   if (sf) list = list.filter(i => i.status === sf);
   const el = document.getElementById('list');
-  if (!list.length) { el.innerHTML = '<div class="empty"><i class="ti ti-file-off" style="font-size:32px;display:block;margin:0 auto 8px"></i>請求書がありません</div>'; return; }
+  if (!list.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-file-off" style="font-size:32px;display:block;margin:0 auto 8px"></i>請求書がありません</div>';
+    return;
+  }
   el.innerHTML = list.map(inv => `
-    <div class="invoice-card">
+    <div class="invoice-card" onclick="openDetail('${inv.id}')">
       <div class="inv-main">
         <span class="inv-num">${inv.id}</span>
         <div>
           <div class="inv-client">${inv.client}</div>
-          <div class="inv-sub">${inv.desc || ''}${inv.desc && inv.dueDate ? ' &nbsp;•&nbsp; ' : ''}期限: ${inv.dueDate}</div>
+          <div class="inv-sub">${inv.desc ? inv.desc + ' &nbsp;•&nbsp; ' : ''}期限: ${inv.dueDate}</div>
         </div>
-        ${badgeHtml(inv.status)}
-        ${inv.fileUrl ? `<a href="${inv.fileUrl}" target="_blank" class="pdf-badge"><i class="ti ti-file-type-pdf" style="font-size:12px"></i>PDF</a>` : ''}
+        ${badgeHtml(inv.status, inv.id)}
+        ${inv.fileUrl ? `<a href="${inv.fileUrl}" target="_blank" class="pdf-badge" onclick="event.stopPropagation()"><i class="ti ti-file-type-pdf" style="font-size:12px"></i>PDF</a>` : ''}
       </div>
-      <div class="inv-actions">
+      <div class="inv-actions" onclick="event.stopPropagation()">
         <div class="inv-amount">${fmt(total(inv.items))}</div>
         <button class="icon-btn" onclick="openEdit('${inv.id}')" title="編集"><i class="ti ti-edit"></i></button>
         <button class="icon-btn" onclick="deleteInv('${inv.id}')" title="削除"><i class="ti ti-trash"></i></button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
+}
+
+function openDetail(id) {
+  const inv = invoices.find(i => i.id === id);
+  if (!inv) return;
+  const st = subtotal(inv.items), tax = Math.round(st * TAX);
+  const statusMap = { draft:'下書き', sent:'送付済', paid:'支払済', overdue:'期限超過' };
+  document.getElementById('modal-area').innerHTML = `
+    <div class="overlay" id="overlay" onclick="closeOnOverlay(event)">
+      <div class="modal">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+          <h2 style="margin:0">請求書詳細</h2>
+          <div style="display:flex;gap:6px">
+            <button class="btn" onclick="openEdit('${inv.id}');"><i class="ti ti-edit"></i>編集</button>
+            <button class="icon-btn" onclick="closeModal()" style="font-size:18px"><i class="ti ti-x"></i></button>
+          </div>
+        </div>
+        <div class="detail-row"><span class="detail-label">請求番号</span><span>${inv.id}</span></div>
+        <div class="detail-row"><span class="detail-label">支払先</span><span style="font-weight:500">${inv.client}</span></div>
+        <div class="detail-row"><span class="detail-label">ステータス</span>${badgeHtml(inv.status)}</div>
+        <div class="detail-row"><span class="detail-label">発行日</span><span>${inv.issueDate}</span></div>
+        <div class="detail-row"><span class="detail-label">支払期限</span><span>${inv.dueDate}</span></div>
+        ${inv.desc ? `<div class="detail-row"><span class="detail-label">件名</span><span>${inv.desc}</span></div>` : ''}
+        ${inv.fileUrl ? `
+        <div style="margin-top:12px;margin-bottom:4px">
+          <div style="font-size:12px;color:#888;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+            <span>PDF</span>
+            <a href="${inv.fileUrl}" target="_blank" class="pdf-badge"><i class="ti ti-external-link" style="font-size:12px"></i>新しいタブで開く</a>
+          </div>
+          <iframe src="${drivePreview(inv.fileUrl)}"
+            style="width:100%;height:420px;border:0.5px solid #e0e0d8;border-radius:8px"
+            allowfullscreen
+            onerror="this.style.display='none';document.getElementById('pdf-fallback-${inv.id}').style.display='flex'"></iframe>
+          <div id="pdf-fallback-${inv.id}" style="display:none;height:120px;align-items:center;justify-content:center;border:0.5px solid #e0e0d8;border-radius:8px;flex-direction:column;gap:8px;color:#888;font-size:13px">
+            <i class="ti ti-file-type-pdf" style="font-size:32px;color:#ccc"></i>
+            <a href="${inv.fileUrl}" target="_blank" class="btn btn-primary">PDFを開く</a>
+          </div>
+        </div>` : ''}
+        <div style="margin-top:12px">
+          <div style="font-size:12px;color:#888;margin-bottom:6px">明細</div>
+          <table class="detail-items">
+            <thead><tr><th>品目</th><th style="text-align:right">数量</th><th style="text-align:right">単価</th><th style="text-align:right">金額</th></tr></thead>
+            <tbody>${inv.items.map(it => `<tr>
+              <td>${it.name || '-'}</td>
+              <td style="text-align:right">${it.qty}</td>
+              <td style="text-align:right">${fmt(it.price)}</td>
+              <td style="text-align:right">${fmt(it.qty * it.price)}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+          <div style="margin-top:8px;text-align:right;font-size:12px;color:#888">
+            <div>小計 ${fmt(st)}</div>
+            <div>消費税 (10%) ${fmt(tax)}</div>
+          </div>
+          <div class="detail-total"><span>合計</span><span>${fmt(st + tax)}</span></div>
+        </div>
+      </div>
+    </div>`;
 }
 
 function openNew() {
-  editId = null;
-  pendingPdfFile = null;
+  editId = null; pendingPdfFile = null;
   const today = new Date().toISOString().slice(0,10);
   const due = new Date(Date.now()+30*86400000).toISOString().slice(0,10);
   const nextNum = 'INV-' + String(invoices.length+1).padStart(3,'0');
   formItems = [{name:'',qty:1,price:0}];
-  showModal({id:nextNum, client: activeTab !== 'all' ? activeTab : '', desc:'', issueDate:today, dueDate:due, status:'draft', fileUrl:''});
+  showModal({ id:nextNum, client: activeTab !== 'all' ? activeTab : '', desc:'', issueDate:today, dueDate:due, status:'sent', fileUrl:'' });
 }
 
 function openEdit(id) {
-  editId = id;
-  pendingPdfFile = null;
+  editId = id; pendingPdfFile = null;
   const inv = invoices.find(i=>i.id===id);
   formItems = inv.items.map(i=>({...i}));
   showModal(inv);
 }
 
 function showModal(inv) {
-  const companyOptions = COMPANIES.map(c => `<option value="${c}" ${inv.client===c?'selected':''}>${c}</option>`).join('');
+  const opts = COMPANIES.map(c => `<option value="${c}" ${inv.client===c?'selected':''}>${c}</option>`).join('');
   document.getElementById('modal-area').innerHTML = `
     <div class="overlay" id="overlay" onclick="closeOnOverlay(event)">
       <div class="modal">
         <h2>${editId ? '請求書を編集' : '新規請求書'}</h2>
-        <div class="pdf-zone" id="pdf-zone" onclick="document.getElementById('pdf-input').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+        <div class="pdf-zone" id="pdf-zone"
+          onclick="document.getElementById('pdf-input').click()"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleDrop(event)">
           <i class="ti ti-file-type-pdf" style="font-size:28px;color:#ccc"></i>
           <div class="pdf-zone-label">PDFをドロップ、またはクリックして選択</div>
-          <div class="pdf-zone-file" id="pdf-filename">${inv.fileUrl ? '既存のPDFあり' : ''}</div>
+          <div class="pdf-zone-file" id="pdf-filename">${inv.fileUrl ? '既存PDFあり' : ''}</div>
           <input type="file" id="pdf-input" accept=".pdf" onchange="handlePdfSelect(this.files[0])">
         </div>
+        <div class="pdf-result" id="pdf-result"></div>
+        <textarea id="pdf-debug" style="width:100%;height:120px;font-size:11px;margin-bottom:8px;font-family:monospace" placeholder="PDFを読み込むとここにテキストが表示されます"></textarea>
         <div class="form-2col">
           <div class="form-row"><label>請求番号</label><input id="f-id" value="${inv.id}"></div>
           <div class="form-row"><label>ステータス</label><select id="f-status">
-            <option value="draft" ${inv.status==='draft'?'selected':''}>下書き</option>
-            <option value="sent" ${inv.status==='sent'?'selected':''}>送付済</option>
-            <option value="paid" ${inv.status==='paid'?'selected':''}>支払済</option>
+            <option value="sent" ${inv.status==='sent'||inv.status==='draft'?'selected':''}>未払い</option>
+            <option value="paid" ${inv.status==='paid'?'selected':''}>支払済み</option>
             <option value="overdue" ${inv.status==='overdue'?'selected':''}>期限超過</option>
           </select></div>
         </div>
-        <div class="form-row"><label>会社</label><select id="f-client">
-          <option value="">選択してください</option>
-          ${companyOptions}
-        </select></div>
+        <div class="form-row"><label>会社</label>
+          <select id="f-client"><option value="">選択してください</option>${opts}</select>
+        </div>
         <div class="form-2col">
           <div class="form-row"><label>発行日</label><input type="date" id="f-issue" value="${inv.issueDate}"></div>
           <div class="form-row"><label>支払期限</label><input type="date" id="f-due" value="${inv.dueDate}"></div>
         </div>
-        <div class="form-row"><label>件名・摘要</label><input id="f-desc" value="${inv.desc||''}" placeholder="Webサイト制作 など"></div>
+        <div class="form-row"><label>件名・摘要</label><input id="f-desc" value="${inv.desc||''}" placeholder="月決報酬 など"></div>
         <div class="form-row"><label>明細</label>
           <div class="items-section">
             <div class="items-header"><span>品目</span><span style="text-align:right">数量</span><span style="text-align:right">単価</span><span></span></div>
@@ -346,6 +521,106 @@ function showModal(inv) {
   renderItems();
 }
 
+function handleTopDrop(e) {
+  e.preventDefault();
+  document.getElementById('top-pdf-zone').classList.remove('drag');
+  const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+  if (files.length > 0) handleTopPdfs(files);
+}
+
+async function handleTopPdfs(fileList) {
+  const files = [...fileList].filter(f => f.type === 'application/pdf');
+  if (files.length === 0) return;
+  if (files.length === 1) { handleTopPdf(files[0]); return; }
+
+  // 複数ファイル: 順番に自動保存
+  const zone = document.getElementById('top-pdf-zone');
+  const label = document.getElementById('top-pdf-label');
+  zone.classList.add('loading');
+  let done = 0, failed = 0;
+  for (const file of files) {
+    label.textContent = `処理中 ${done + failed + 1} / ${files.length}：${file.name}`;
+    try {
+      const text = await extractTextFromPdf(file);
+      const company = detectCompany(text);
+      const dueDate = detectDueDate(text);
+      const amount  = detectAmount(text);
+      const desc    = detectDesc(text);
+      const today   = new Date().toISOString().slice(0,10);
+      const nextNum = 'INV-' + String(invoices.length + 1).padStart(3,'0');
+      const fileUrl = await uploadPdfToDrive(file);
+      const inv = {
+        id: nextNum,
+        client: company || '',
+        desc: desc || '',
+        issueDate: today,
+        dueDate: dueDate || new Date(Date.now() + 30*86400000).toISOString().slice(0,10),
+        status: 'draft',
+        items: amount > 0 ? [{ name: desc || 'ご請求分', qty: 1, price: Math.round(amount / 1.1) }] : [{ name: '', qty: 1, price: 0 }],
+        fileUrl
+      };
+      await apiGet({ action: 'save', invoice: JSON.stringify(inv) });
+      invoices.unshift(inv);
+      done++;
+    } catch(e) { failed++; }
+  }
+  zone.classList.remove('loading');
+  label.textContent = 'PDFをここにドロップして請求書を追加';
+  document.getElementById('top-pdf-input').value = '';
+  render();
+  toast(`${done}件を保存しました${failed > 0 ? `（${failed}件失敗）` : ''}`);
+}
+
+async function handleTopPdf(file) {
+  if (!file) return;
+  const zone = document.getElementById('top-pdf-zone');
+  const label = document.getElementById('top-pdf-label');
+  zone.classList.add('loading');
+  label.textContent = 'PDF解析中...';
+  try {
+    const text = await extractTextFromPdf(file);
+    const company  = detectCompany(text);
+    const dueDate  = detectDueDate(text);
+    const amount   = detectAmount(text);
+    const desc     = detectDesc(text);
+    const today    = new Date().toISOString().slice(0,10);
+    const nextNum  = 'INV-' + String(invoices.length + 1).padStart(3,'0');
+    editId = null;
+    pendingPdfFile = file;
+    formItems = amount > 0
+      ? [{ name: desc || 'ご請求分', qty: 1, price: Math.round(amount / 1.1) }]
+      : [{ name: '', qty: 1, price: 0 }];
+    showModal({
+      id: nextNum,
+      client: company || (activeTab !== 'all' ? activeTab : ''),
+      desc: desc || '',
+      issueDate: today,
+      dueDate: dueDate || new Date(Date.now() + 30*86400000).toISOString().slice(0,10),
+      status: 'draft',
+      fileUrl: ''
+    });
+    const fn = document.getElementById('pdf-filename');
+    if (fn) fn.textContent = file.name;
+    const result = document.getElementById('pdf-result');
+    if (result) {
+      const detected = [];
+      if (company) detected.push('会社名');
+      if (dueDate) detected.push('支払期限');
+      if (amount > 0) detected.push(`金額 ¥${amount.toLocaleString('ja-JP')}`);
+      if (detected.length > 0) {
+        result.textContent = '✓ 自動入力: ' + detected.join('、');
+        result.classList.add('show');
+      }
+    }
+  } catch(e) {
+    label.textContent = 'PDFの読み込みに失敗しました';
+  } finally {
+    zone.classList.remove('loading');
+    label.textContent = 'PDFをここにドロップして請求書を追加';
+    document.getElementById('top-pdf-input').value = '';
+  }
+}
+
 function handleDrop(e) {
   e.preventDefault();
   document.getElementById('pdf-zone').classList.remove('drag');
@@ -357,22 +632,51 @@ async function handlePdfSelect(file) {
   if (!file) return;
   pendingPdfFile = file;
   document.getElementById('pdf-filename').textContent = file.name;
-  const label = document.querySelector('.pdf-zone-label');
-  label.textContent = '解析中...';
+  document.querySelector('.pdf-zone-label').textContent = 'PDF解析中...';
+  document.getElementById('pdf-result').classList.remove('show');
   try {
     const text = await extractTextFromPdf(file);
-    const company = detectCompany(text);
-    const dueDate = detectDueDate(text);
-    if (company) document.getElementById('f-client').value = company;
-    if (dueDate) document.getElementById('f-due').value = dueDate;
-    label.textContent = company || dueDate ? 'PDFから情報を読み込みました' : 'PDFを選択しました（自動検出できませんでした）';
+    // デバッグ: 抽出テキストを画面に表示
+    const dbg = document.getElementById('pdf-debug');
+    if (dbg) dbg.value = '[スペース除去後]\n' + norm(text).replace(/\s/g,'').slice(0, 1500);
+    const company  = detectCompany(text);
+    const dueDate  = detectDueDate(text);
+    const amount   = detectAmount(text);
+    const desc     = detectDesc(text);
+
+    const detected = [];
+
+    if (company) {
+      document.getElementById('f-client').value = company;
+      detected.push('会社名');
+    }
+    if (dueDate) {
+      document.getElementById('f-due').value = dueDate;
+      detected.push('支払期限');
+    }
+    if (amount > 0) {
+      // PDF金額は源泉控除後の最終支払額なので、10%税計算後に一致するよう割り戻す
+      formItems = [{ name: desc || 'ご請求分', qty: 1, price: Math.round(amount / 1.1) }];
+      renderItems();
+      detected.push(`金額 ${fmt(amount)}`);
+    }
+    if (desc && !amount) {
+      document.getElementById('f-desc').value = desc;
+    }
+
+    const result = document.getElementById('pdf-result');
+    if (detected.length > 0) {
+      result.textContent = '✓ 自動入力: ' + detected.join('、');
+      result.classList.add('show');
+    }
+    document.querySelector('.pdf-zone-label').textContent = 'PDFを読み込みました';
   } catch(e) {
-    label.textContent = 'PDFを選択しました';
+    document.querySelector('.pdf-zone-label').textContent = 'PDFを選択しました（解析失敗）';
   }
 }
 
 function renderItems() {
-  document.getElementById('f-items').innerHTML = formItems.map((it,i)=>`
+  document.getElementById('f-items').innerHTML = formItems.map((it,i) => `
     <div class="item-row">
       <input value="${it.name}" oninput="formItems[${i}].name=this.value" placeholder="品目名">
       <input type="number" value="${it.qty}" min="1" oninput="formItems[${i}].qty=this.value;updTotals()" style="text-align:right">
@@ -383,8 +687,7 @@ function renderItems() {
 }
 
 function updTotals() {
-  const st = subtotal(formItems);
-  const tax = Math.round(st*TAX);
+  const st = subtotal(formItems), tax = Math.round(st * TAX);
   document.getElementById('f-totals').innerHTML = `
     <div class="subtotal-row"><span>小計</span><span>${fmt(st)}</span></div>
     <div class="subtotal-row"><span>消費税 (10%)</span><span>${fmt(tax)}</span></div>
@@ -392,7 +695,7 @@ function updTotals() {
 }
 
 function addItem() { formItems.push({name:'',qty:1,price:0}); renderItems(); }
-function removeItem(i) { if(formItems.length>1){formItems.splice(i,1);renderItems();} }
+function removeItem(i) { if(formItems.length>1){ formItems.splice(i,1); renderItems(); } }
 
 async function saveInv() {
   const inv = {
@@ -402,35 +705,27 @@ async function saveInv() {
     issueDate: document.getElementById('f-issue').value,
     dueDate: document.getElementById('f-due').value,
     status: document.getElementById('f-status').value,
-    items: formItems.map(i=>({name:i.name,qty:Number(i.qty),price:Number(i.price)})),
-    fileUrl: editId ? (invoices.find(i=>i.id===editId)||{}).fileUrl || '' : ''
+    items: formItems.map(i => ({ name:i.name, qty:Number(i.qty), price:Number(i.price) })),
+    fileUrl: editId ? ((invoices.find(i=>i.id===editId)||{}).fileUrl||'') : ''
   };
   if (!inv.id || !inv.client) { alert('請求番号と会社名は必須です'); return; }
   const btn = document.getElementById('save-btn');
-  btn.textContent = '保存中...';
-  btn.disabled = true;
+  btn.textContent = '保存中...'; btn.disabled = true;
   if (pendingPdfFile) {
     btn.textContent = 'PDF保存中...';
-    const url = await uploadPdfToDrive(pendingPdfFile);
-    inv.fileUrl = url;
+    inv.fileUrl = await uploadPdfToDrive(pendingPdfFile);
   }
   await apiGet({ action: 'save', invoice: JSON.stringify(inv) });
-  if (editId) {
-    invoices[invoices.findIndex(i=>i.id===editId)] = inv;
-  } else {
-    invoices.unshift(inv);
-  }
-  closeModal();
-  render();
-  toast('保存しました');
+  if (editId) invoices[invoices.findIndex(i=>i.id===editId)] = inv;
+  else invoices.unshift(inv);
+  closeModal(); render(); toast('保存しました');
 }
 
 async function deleteInv(id) {
   if (!confirm('この請求書を削除しますか？')) return;
   await apiGet({ action: 'delete', id });
-  invoices = invoices.filter(i=>i.id!==id);
-  render();
-  toast('削除しました');
+  invoices = invoices.filter(i => i.id !== id);
+  render(); toast('削除しました');
 }
 
 function closeModal() { document.getElementById('modal-area').innerHTML = ''; pendingPdfFile = null; }
